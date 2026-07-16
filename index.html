@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6588713373840274"
-     crossorigin="anonymous"></script>
-  <meta name="google-site-verification" content="ctzD28DOUC7RtsBMuWBPIaSezw8IVItxvHSxf4Lh8E8" />
 <title>MindMosaic — Free Personality Tests</title>
 <meta name="description" content="Free, comprehensive personality tests: strengths, 16 types, IQ, EQ, Big Five, Enneagram, Love Languages. Instant results, no signup.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -131,6 +128,12 @@ details p{color:var(--muted);margin-top:8px;font-size:.94rem}
 .result-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
 .result-note{background:var(--accent-soft);border-radius:14px;padding:16px 18px;font-size:.88rem;color:#3E2FA3;margin-top:18px}
 .retake-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.share-row{display:flex;align-items:center;gap:14px;margin-top:18px;flex-wrap:wrap}
+.share-label{font-size:.85rem;font-weight:600;color:var(--muted)}
+.share-btns{display:flex;gap:10px}
+.share-btn{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}
+.share-btn:hover{transform:translateY(-2px);background:var(--accent-soft)}
+.share-btn.copied{background:var(--green);color:#fff;border-color:var(--green)}
 
 /* ---------- Interstitial ad ---------- */
 .overlay{position:fixed;inset:0;background:rgba(20,15,40,.72);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
@@ -262,6 +265,14 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:34px 0;color:var
     <div class="result-grid">
       <div>
         <div class="result-hero" id="resultCard"></div>
+        <div class="share-row" id="shareRow">
+          <span class="share-label">Share your result</span>
+          <div class="share-btns">
+            <button class="share-btn sb-x" id="shareX" title="Share on X">𝕏</button>
+            <button class="share-btn sb-wa" id="shareWA" title="Share on WhatsApp">💬</button>
+            <button class="share-btn sb-copy" id="shareCopy" title="Copy link">🔗</button>
+          </div>
+        </div>
         <div class="retake-row">
           <button class="btn btn-primary" id="retakeBtn">Retake this test</button>
           <button class="btn btn-ghost" onclick="go('home');scrollToId('tests')">Try another test</button>
@@ -297,7 +308,6 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:34px 0;color:var
   <div class="wrap foot-in">
     <div><b style="font-family:var(--display);color:var(--ink)">MindMosaic</b> · free personality tests<br>For self-reflection and entertainment — not a clinical or diagnostic tool.</div>
     <div>Myers-Briggs® and HIGH5® are trademarks of their respective owners.<br>This independent site offers original, unaffiliated tests inspired by those frameworks.</div>
-    <div><a href="/privacy.html" style="color:var(--muted);text-decoration:underline">Privacy Policy</a></div>
   </div>
 </footer>
 <script>
@@ -520,7 +530,7 @@ const MBTI_NAMES={ISTJ:"The Inspector",ISFJ:"The Protector",INFJ:"The Advocate",
 <script>
 /* ================= ENGINE ================= */
 const $=id=>document.getElementById(id);
-let cur=null, qi=0, answers=[];
+let cur=null, qi=0, answers=[], shareHeadline="";
 
 function go(name){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
@@ -626,6 +636,24 @@ function scoreTraits(t){
     .sort((a,b)=>b.pct-a.pct);
 }
 
+function setupShare(t){
+  const url="https://mindmosaic-two.vercel.app/";
+  const text=`${shareHeadline} — take the free test at MindMosaic:`;
+  $('shareX').onclick=()=>{
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`,'_blank','width=550,height=420');
+  };
+  $('shareWA').onclick=()=>{
+    window.open(`https://wa.me/?text=${encodeURIComponent(text+" "+url)}`,'_blank');
+  };
+  $('shareCopy').onclick=()=>{
+    navigator.clipboard.writeText(text+" "+url).then(()=>{
+      const b=$('shareCopy');
+      b.classList.add('copied'); b.textContent="✓";
+      setTimeout(()=>{b.classList.remove('copied'); b.innerHTML="🔗";},1800);
+    });
+  };
+}
+
 function barRow(label,pct,color,note){
   return `<div class="bar-row"><div class="bar-top"><span>${label}</span><span>${pct}%${note?" · "+note:""}</span></div>
     <div class="bar"><i style="--bc:${color};width:0" data-w="${pct}"></i></div></div>`;
@@ -639,6 +667,7 @@ function showResults(){
     const tally={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
     t.questions.forEach((q,i)=>tally[q.o[answers[i]].k]++);
     const type=(tally.E>=tally.I?"E":"I")+(tally.S>=tally.N?"S":"N")+(tally.T>=tally.F?"T":"F")+(tally.J>=tally.P?"J":"P");
+    shareHeadline=`I'm ${type} — ${MBTI_NAMES[type]} 🧩`;
     const pairs=[["E","I","Extraverted","Introverted"],["S","N","Sensing","Intuitive"],["T","F","Thinking","Feeling"],["J","P","Judging","Perceiving"]];
     html=`<div class="eyebrow">Your 16-Types result</div>
       <div class="result-title">${type} — ${MBTI_NAMES[type]}</div>
@@ -654,6 +683,7 @@ function showResults(){
     const correct=t.questions.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0);
     const iq=Math.round(70+correct*4.7); // 0→70 … 15→~140
     const band= iq>=130?"Exceptional range":iq>=115?"Above-average range":iq>=95?"Solid average range":iq>=85?"Slightly below average today":"Warm-up round — try again fresh";
+    shareHeadline=`My IQ Challenge score: ≈${iq} 🧠`;
     html=`<div class="eyebrow">Your IQ Challenge result</div>
       <div class="result-title">≈ ${iq} <span style="font-size:.5em;color:var(--muted)">estimated</span></div>
       <p class="result-sub">You solved <b>${correct} of 15</b> puzzles. ${band}. Remember: this is a quick reasoning snapshot, not a proctored psychometric exam — sleep, coffee, and mood all move this number.</p>
@@ -662,6 +692,7 @@ function showResults(){
 
   else if(t.kind==='top'){ // strengths: top 5 of 10
     const sc=scoreTraits(t), top=sc.slice(0,5);
+    shareHeadline=`My top strength: ${t.traits[top[0].k]} ⭐`;
     html=`<div class="eyebrow">Your Strengths Spotlight</div>
       <div class="result-title">Your top 5 strengths</div>
       <p class="result-sub">These are the muscles you flex without noticing. Build your work and life around them.</p>
@@ -671,6 +702,7 @@ function showResults(){
 
   else if(t.kind==='top1'){ // enneagram / love languages
     const sc=scoreTraits(t), w=sc[0], second=sc[1];
+    shareHeadline=`My ${t.name} result: ${t.traits[w.k]} ${t.icon}`;
     html=`<div class="eyebrow">Your ${t.name} result</div>
       <div class="result-title">${t.traits[w.k]}</div>
       <p class="result-sub">${t.traitDesc[w.k]}</p>
@@ -681,6 +713,7 @@ function showResults(){
   else{ // domains: EQ, Big Five
     const sc=scoreTraits(t);
     const order=Object.keys(t.traits); // keep canonical order
+    shareHeadline=`My top ${t.name} trait: ${t.traits[sc[0].k]} ${t.icon}`;
     html=`<div class="eyebrow">Your ${t.name} profile</div>
       <div class="result-title">${t.name} breakdown</div>
       <p class="result-sub">There's no perfect profile — each trait has a bright side at both ends. Your strongest area is <b>${t.traits[sc[0].k]}</b>.</p>
@@ -691,6 +724,7 @@ function showResults(){
   html+=`<div class="result-note">For self-reflection and entertainment only — not a clinical, diagnostic, or hiring tool.</div>`;
   $('resultCard').innerHTML=html;
   $('retakeBtn').onclick=()=>startTest(cur);
+  setupShare(t);
   go('results');
   requestAnimationFrame(()=>setTimeout(()=>{
     document.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+"%");
