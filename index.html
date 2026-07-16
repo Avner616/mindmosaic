@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MindMosaic — Free Personality Tests</title>
+<meta name="description" content="Free, comprehensive personality tests: strengths, 16 types, IQ, EQ, Big Five, Enneagram, Love Languages. Instant results, no signup.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F3FB; --ink:#1E1930; --muted:#6A6486; --card:#FFFFFF;
+  --line:#E4E1F0; --accent:#5B3DF5; --accent-soft:#ECE8FF;
+  --coral:#FF6B5E; --teal:#0FA99B; --gold:#E89B12; --violet:#5B3DF5;
+  --pink:#E0559A; --blue:#2F7CE0; --green:#1F9E58;
+  --radius:18px; --shadow:0 10px 30px rgba(30,25,48,.08);
+  --display:"Bricolage Grotesque","Avenir Next","Trebuchet MS",sans-serif;
+  --body:"Instrument Sans","Segoe UI",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);line-height:1.55;-webkit-font-smoothing:antialiased}
+img{max-width:100%}
+button{font-family:inherit;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* ---------- Nav ---------- */
+nav{position:sticky;top:0;z-index:50;background:rgba(244,243,251,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{font-family:var(--display);font-weight:800;font-size:1.35rem;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:none;color:var(--ink)}
+.logo-blot{width:30px;height:30px;background:var(--accent);border-radius:62% 38% 55% 45%/48% 60% 40% 52%;animation:blob 7s ease-in-out infinite}
+.nav-links{display:flex;gap:22px;font-size:.92rem;font-weight:500;color:var(--muted)}
+.nav-links button{background:none;border:none;color:inherit;font-size:inherit;font-weight:inherit;padding:4px 2px}
+.nav-links button:hover{color:var(--ink)}
+.free-pill{background:var(--ink);color:#fff;padding:7px 14px;border-radius:999px;font-size:.8rem;font-weight:600;white-space:nowrap}
+
+/* ---------- Hero ---------- */
+.hero{padding:64px 0 40px;display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+.eyebrow{font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.03em;margin-bottom:18px}
+h1 em{font-style:normal;color:var(--accent)}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:46ch;margin-bottom:26px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.btn{border:none;border-radius:999px;padding:14px 26px;font-size:1rem;font-weight:600;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 8px 20px rgba(91,61,245,.35)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.hero-stats{display:flex;gap:26px;margin-top:30px;font-size:.86rem;color:var(--muted)}
+.hero-stats b{display:block;font-family:var(--display);font-size:1.3rem;color:var(--ink)}
+
+/* Signature inkblot */
+.blot-stage{position:relative;height:340px;display:flex;align-items:center;justify-content:center}
+.blot{position:absolute;width:230px;height:260px;opacity:.9;animation:blob 9s ease-in-out infinite}
+.blot.l{background:var(--accent);left:14%;transform:scaleX(-1)}
+.blot.r{background:var(--coral);right:14%;animation-delay:-4.5s;mix-blend-mode:multiply}
+.blot.c{background:var(--teal);width:150px;height:170px;left:38%;top:52%;animation-delay:-2s;mix-blend-mode:multiply;opacity:.75}
+@keyframes blob{
+  0%,100%{border-radius:62% 38% 55% 45%/48% 60% 40% 52%}
+  33%{border-radius:45% 55% 40% 60%/58% 42% 58% 42%}
+  66%{border-radius:55% 45% 62% 38%/42% 55% 45% 58%}
+}
+@media (prefers-reduced-motion:reduce){.blot,.logo-blot{animation:none}}
+
+/* ---------- Ads ---------- */
+.ad-slot{background:#fff;border:1px dashed #C9C3E4;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#9A93B8;text-align:center;padding:14px}
+.ad-tag{font-size:.62rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#B4ADD1}
+.ad-slot .ad-cta{font-size:.85rem;font-weight:600;color:#7A72A0}
+.ad-leaderboard{min-height:90px;margin:8px 0 26px}
+.ad-inline{min-height:100px;margin:26px 0}
+.ad-box{min-height:250px;width:300px;max-width:100%}
+
+/* ---------- Test grid ---------- */
+section{padding:36px 0}
+.sec-head{margin-bottom:24px}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.02em}
+.sec-head p{color:var(--muted);margin-top:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px}
+.tcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);transition:transform .18s,box-shadow .18s;position:relative;overflow:hidden}
+.tcard:hover{transform:translateY(-4px);box-shadow:0 16px 36px rgba(30,25,48,.13)}
+.tcard::before{content:"";position:absolute;top:-40px;right:-40px;width:110px;height:120px;border-radius:62% 38% 55% 45%/48% 60% 40% 52%;background:var(--tc,#5B3DF5);opacity:.13}
+.tchip{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:var(--tc);color:#fff}
+.tcard h3{font-family:var(--display);font-weight:700;font-size:1.2rem;letter-spacing:-.01em}
+.tcard p{color:var(--muted);font-size:.92rem;flex:1}
+.tmeta{display:flex;gap:14px;font-size:.78rem;color:var(--muted);font-weight:500}
+.tcard .btn{align-self:flex-start;padding:10px 20px;font-size:.9rem;background:var(--tc);color:#fff}
+
+/* ---------- How it works / FAQ ---------- */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+.step b{font-family:var(--display);display:block;margin-bottom:6px}
+.step span{color:var(--muted);font-size:.92rem}
+details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+summary{font-weight:600;cursor:pointer}
+details p{color:var(--muted);margin-top:8px;font-size:.94rem}
+
+/* ---------- Quiz screen ---------- */
+.screen{display:none}
+.screen.active{display:block;animation:fade .25s ease}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.quiz-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:26px 0 8px}
+.quiz-head h2{font-size:1.3rem}
+.back-link{background:none;border:none;color:var(--muted);font-size:.9rem;font-weight:500}
+.back-link:hover{color:var(--ink)}
+.progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:14px 0 28px}
+.progress i{display:block;height:100%;background:var(--qc,var(--accent));width:0;transition:width .3s;border-radius:99px}
+.qcount{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.qtext{font-family:var(--display);font-weight:700;font-size:clamp(1.25rem,2.6vw,1.7rem);letter-spacing:-.01em;margin:10px 0 24px;min-height:2.2em}
+.opts{display:flex;flex-direction:column;gap:12px;max-width:640px}
+.opt{background:#fff;border:2px solid var(--line);border-radius:14px;padding:16px 18px;text-align:left;font-size:1rem;font-weight:500;transition:border-color .12s,transform .12s}
+.opt:hover{border-color:var(--qc,var(--accent));transform:translateX(4px)}
+.likert{display:flex;gap:10px;max-width:640px}
+.likert .opt{flex:1;text-align:center;padding:14px 6px;font-size:.85rem;display:flex;flex-direction:column;gap:4px;align-items:center}
+.likert .opt b{font-size:1.25rem;font-family:var(--display)}
+.quiz-foot{margin-top:30px;color:var(--muted);font-size:.82rem}
+
+/* ---------- Results ---------- */
+.result-hero{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px;box-shadow:var(--shadow);margin:26px 0}
+.result-hero .eyebrow{margin-bottom:8px}
+.result-title{font-family:var(--display);font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.02em}
+.result-sub{color:var(--muted);margin-top:8px;max-width:60ch}
+.bars{margin:24px 0;display:flex;flex-direction:column;gap:14px;max-width:640px}
+.bar-row .bar-top{display:flex;justify-content:space-between;font-size:.9rem;font-weight:600;margin-bottom:5px}
+.bar-row .bar-top span:last-child{color:var(--muted)}
+.bar{height:12px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--bc,var(--accent));transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.result-grid{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+.result-note{background:var(--accent-soft);border-radius:14px;padding:16px 18px;font-size:.88rem;color:#3E2FA3;margin-top:18px}
+.retake-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+
+/* ---------- Interstitial ad ---------- */
+.overlay{position:fixed;inset:0;background:rgba(20,15,40,.72);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.show{display:flex;animation:fade .25s}
+.modal{background:#fff;border-radius:20px;max-width:400px;width:100%;padding:26px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.modal .ad-tag{margin-bottom:12px}
+.modal h3{font-family:var(--display);font-weight:800;font-size:1.25rem;margin:16px 0 6px}
+.modal p{color:var(--muted);font-size:.92rem;margin-bottom:18px}
+.ad-creative{height:250px;border-radius:14px;background:linear-gradient(135deg,#ECE8FF,#FFE9E0);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#7A72A0;border:1px dashed #C9C3E4}
+.ad-creative b{font-family:var(--display);font-size:1.05rem;color:#4A4370}
+#adCloseBtn{width:100%;background:var(--ink);color:#fff}
+#adCloseBtn:disabled{opacity:.45;cursor:wait}
+
+/* ---------- Footer ---------- */
+footer{border-top:1px solid var(--line);margin-top:50px;padding:34px 0;color:var(--muted);font-size:.85rem}
+.foot-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+
+/* ---------- Mobile ---------- */
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr;padding-top:36px}
+  .blot-stage{height:220px}
+  .blot{width:150px;height:170px}
+  .blot.c{width:100px;height:115px}
+  .nav-links{display:none}
+  .result-grid{grid-template-columns:1fr}
+  .likert{flex-wrap:wrap}
+  .likert .opt{min-width:calc(33% - 8px)}
+  .hero-stats{gap:18px;flex-wrap:wrap}
+}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <button class="logo" onclick="go('home')"><span class="logo-blot"></span>MindMosaic</button>
+    <div class="nav-links">
+      <button onclick="go('home');scrollToId('tests')">Tests</button>
+      <button onclick="go('home');scrollToId('how')">How it works</button>
+      <button onclick="go('home');scrollToId('faq')">FAQ</button>
+    </div>
+    <span class="free-pill">100% free · no signup</span>
+  </div>
+</nav>
+
+<!-- ================= HOME ================= -->
+<div id="screen-home" class="screen active">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Seven tests · Instant results</div>
+        <h1>What does your mind look like <em>from the inside?</em></h1>
+        <p>Take science-inspired personality, strengths, and intelligence tests — free, private, and scored instantly in your browser. Nothing is uploaded, no account needed.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" onclick="scrollToId('tests')">Browse the tests</button>
+          <button class="btn btn-ghost" onclick="startTest('mbti')">Start with the 16 Types test</button>
+        </div>
+        <div class="hero-stats">
+          <div><b>7</b>tests</div>
+          <div><b>124</b>questions written</div>
+          <div><b>~5 min</b>average test</div>
+          <div><b>0 zł</b>always free</div>
+        </div>
+      </div>
+      <div class="blot-stage" aria-hidden="true">
+        <div class="blot l"></div><div class="blot r"></div><div class="blot c"></div>
+      </div>
+    </div>
+
+    <!-- AdSense leaderboard: paste ad unit code inside this div -->
+    <div class="ad-slot ad-leaderboard" id="ad-top">
+      <span class="ad-tag">Sponsored</span>
+      <span class="ad-cta">Advertise here — 728×90 leaderboard</span>
+    </div>
+
+    <section id="tests">
+      <div class="sec-head">
+        <h2>Pick a test</h2>
+        <p>Every test is free, takes minutes, and ends with a full breakdown of your results.</p>
+      </div>
+      <div class="grid" id="testGrid"></div>
+    </section>
+
+    <section id="how">
+      <div class="sec-head"><h2>How it works</h2></div>
+      <div class="steps">
+        <div class="step"><b>1 · Choose a test</b><span>Strengths, type, intelligence, emotions, temperament — pick what you're curious about.</span></div>
+        <div class="step"><b>2 · Answer honestly</b><span>There are no wrong answers (except on the IQ test — those are very wrong or very right).</span></div>
+        <div class="step"><b>3 · Get your breakdown</b><span>Instant scores, charts, and a plain-language profile you can screenshot and share.</span></div>
+        <div class="step"><b>4 · Keep it private</b><span>Everything is scored on your device. We never see, store, or sell your answers.</span></div>
+      </div>
+    </section>
+
+    <div class="ad-slot ad-inline">
+      <span class="ad-tag">Sponsored</span>
+      <span class="ad-cta">Advertise here — responsive in-content unit</span>
+    </div>
+
+    <section id="faq">
+      <div class="sec-head"><h2>Questions people ask</h2></div>
+      <details><summary>Is it really free?</summary><p>Yes — every test, every result, forever. The site is supported by clearly-labelled sponsored placements instead of paywalls.</p></details>
+      <details><summary>Are these clinical diagnoses?</summary><p>No. These tests are for self-reflection and entertainment. They are inspired by popular frameworks (Myers-Briggs–style types, HIGH5-style strengths, Big Five research, Enneagram tradition) but they are not medical, psychological, or educational assessments. If something here raises a real concern, talk to a qualified professional.</p></details>
+      <details><summary>Do you store my answers?</summary><p>No. All scoring happens in your browser. Refresh the page and it's gone.</p></details>
+      <details><summary>Why do I see an ad before my results?</summary><p>One short sponsored message after each test is what keeps the site free. Close it and your results appear immediately — no tricks, no email walls.</p></details>
+      <details><summary>How accurate is the IQ test?</summary><p>It's a 15-item reasoning challenge — a fun estimate, not a proctored psychometric exam. Treat the score as a warm-up for your brain, not a verdict on it.</p></details>
+    </section>
+  </div>
+</div>
+
+<!-- ================= QUIZ ================= -->
+<div id="screen-quiz" class="screen">
+  <div class="wrap">
+    <div class="quiz-head">
+      <h2 id="quizTitle"></h2>
+      <button class="back-link" onclick="confirmExit()">✕ Exit test</button>
+    </div>
+    <div class="progress"><i id="progressBar"></i></div>
+    <div class="qcount" id="qCount"></div>
+    <div class="qtext" id="qText"></div>
+    <div id="qOpts"></div>
+    <div class="quiz-foot" id="quizFoot"></div>
+  </div>
+</div>
+
+<!-- ================= RESULTS ================= -->
+<div id="screen-results" class="screen">
+  <div class="wrap">
+    <div class="result-grid">
+      <div>
+        <div class="result-hero" id="resultCard"></div>
+        <div class="retake-row">
+          <button class="btn btn-primary" id="retakeBtn">Retake this test</button>
+          <button class="btn btn-ghost" onclick="go('home');scrollToId('tests')">Try another test</button>
+        </div>
+      </div>
+      <div>
+        <!-- AdSense box: paste 300x250 ad unit code inside this div -->
+        <div class="ad-slot ad-box">
+          <span class="ad-tag">Sponsored</span>
+          <span class="ad-cta">Advertise here — 300×250 box</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= INTERSTITIAL AD ================= -->
+<div class="overlay" id="adOverlay" role="dialog" aria-modal="true" aria-label="Sponsored message">
+  <div class="modal">
+    <span class="ad-tag">Sponsored</span>
+    <!-- AdSense interstitial: paste 300x250 ad unit code inside .ad-creative -->
+    <div class="ad-creative">
+      <b>Your ad could be here</b>
+      <span>300 × 250 sponsored placement</span>
+    </div>
+    <h3>Your results are ready 🎉</h3>
+    <p>This short sponsored message keeps MindMosaic free. <strong>Close the ad to see your results.</strong></p>
+    <button class="btn" id="adCloseBtn" disabled></button>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot-in">
+    <div><b style="font-family:var(--display);color:var(--ink)">MindMosaic</b> · free personality tests<br>For self-reflection and entertainment — not a clinical or diagnostic tool.</div>
+    <div>Myers-Briggs® and HIGH5® are trademarks of their respective owners.<br>This independent site offers original, unaffiliated tests inspired by those frameworks.</div>
+  </div>
+</footer>
+<script>
+/* ============ helpers to build questions ============ */
+const L=(k,t,rev)=>({type:'likert',k,t,rev:!!rev});          // likert -> trait k
+const C=(t,opts)=>({type:'choice',t,o:opts});                 // choice -> option keys
+const Q=(t,opts,correct)=>({type:'quiz',t,o:opts,correct});   // right/wrong
+
+/* ============ TEST DEFINITIONS ============ */
+const TESTS={
+
+/* ---------- 1. Strengths (HIGH5-style) ---------- */
+strengths:{
+ name:"Strengths Spotlight", icon:"⭐", color:"var(--gold)", hex:"#E89B12",
+ tag:"HIGH5-style · top 5 strengths",
+ desc:"Twenty quick statements reveal the five things you naturally do better than most.",
+ time:"4 min", n:20, kind:"top",
+ traits:{STR:"Strategist",MOT:"Motivator",EMP:"Empathizer",PRO:"Problem Solver",STO:"Storyteller",ORG:"Organizer",SLF:"Self-Believer",PEA:"Peacekeeper",CAT:"Catalyst",CUR:"Curious Mind"},
+ traitDesc:{STR:"You instinctively see patterns and pick the smartest route to a goal.",MOT:"You lift the energy of every room and get people moving.",EMP:"You sense what others feel before they say a word.",PRO:"Broken things and stuck situations are your favorite playground.",STO:"You turn dry facts into stories people remember.",ORG:"You bring order, plans, and calm to chaos.",SLF:"You trust your own judgment and recover fast from setbacks.",PEA:"You find the common ground others miss and defuse conflict.",CAT:"You turn ideas into action — momentum is your superpower.",CUR:"You collect questions, ideas, and rabbit holes for fun."},
+ questions:[
+  L('STR',"When plans change suddenly, I quickly see a new best path."),
+  L('MOT',"People say my energy is contagious."),
+  L('EMP',"I often know how someone feels before they tell me."),
+  L('PRO',"I get a small thrill when something is broken and I can fix it."),
+  L('STO',"I naturally explain things through stories and examples."),
+  L('ORG',"I feel calmer once things are sorted into lists and plans."),
+  L('SLF',"Criticism stings briefly, but rarely shakes my confidence."),
+  L('PEA',"In arguments, I instinctively look for what both sides agree on."),
+  L('CAT',"I'd rather start imperfectly today than perfectly next month."),
+  L('CUR',"I regularly fall down rabbit holes just because a topic looks interesting."),
+  L('STR',"Friends ask me to help them 'think through' big decisions."),
+  L('MOT',"I love celebrating other people's wins loudly."),
+  L('EMP',"People open up to me quickly, even strangers."),
+  L('PRO',"Puzzles and tricky problems energize me more than they tire me."),
+  L('STO',"I remember (and retell) anecdotes better than statistics."),
+  L('ORG',"My calendar, files, or workspace are tidier than most people's."),
+  L('SLF',"I make decisions without needing everyone's approval."),
+  L('PEA',"Tension between people bothers me until it's resolved."),
+  L('CAT',"Waiting for permission frustrates me — I like to just begin."),
+  L('CUR',"I ask 'why?' more often than most adults I know.")
+ ]
+},
+
+/* ---------- 2. 16 Types (Myers-Briggs style) ---------- */
+mbti:{
+ name:"16 Types Indicator", icon:"🧩", color:"var(--violet)", hex:"#5B3DF5",
+ tag:"Myers-Briggs–style · 4-letter type",
+ desc:"Twenty either/or choices place you among the sixteen classic personality types.",
+ time:"5 min", n:20, kind:"mbti",
+ questions:[
+  C("A free Saturday appears out of nowhere. Your instinct:",[{x:"Text people — let's make it a group thing",k:"E"},{x:"Protect it — quiet time, my plans",k:"I"}]),
+  C("After a long social event you usually feel…",[{x:"Charged up and chatty",k:"E"},{x:"Happy, but drained and ready for silence",k:"I"}]),
+  C("At a party you're more likely to…",[{x:"Meet five new people",k:"E"},{x:"Go deep with one or two",k:"I"}]),
+  C("Thinking out loud or thinking it through first?",[{x:"Out loud — talking is how I think",k:"E"},{x:"Silently — I speak when it's formed",k:"I"}]),
+  C("Your ideal work style:",[{x:"Collaborative, lots of back-and-forth",k:"E"},{x:"Independent, deep focus",k:"I"}]),
+  C("You trust information more when it's…",[{x:"Concrete: facts, details, direct experience",k:"S"},{x:"Conceptual: patterns, hunches, possibilities",k:"N"}]),
+  C("When you read instructions, you…",[{x:"Follow them step by step",k:"S"},{x:"Skim, then improvise",k:"N"}]),
+  C("Which compliment lands better?",[{x:"'You're so practical and reliable.'",k:"S"},{x:"'You're so imaginative and original.'",k:"N"}]),
+  C("Your daydreams are mostly about…",[{x:"Real plans: trips, projects, upgrades",k:"S"},{x:"What-ifs: futures, theories, other lives",k:"N"}]),
+  C("A friend describes a movie. You want to know…",[{x:"What actually happens in it",k:"S"},{x:"What it's really *about*",k:"N"}]),
+  C("A friend brings you a problem. First move:",[{x:"Analyze it and propose fixes",k:"T"},{x:"Ask how they're feeling about it",k:"F"}]),
+  C("Hard feedback should be…",[{x:"Direct — clarity is kindness",k:"T"},{x:"Gentle — delivery matters as much as content",k:"F"}]),
+  C("You'd rather be seen as…",[{x:"Fair and logical",k:"T"},{x:"Warm and compassionate",k:"F"}]),
+  C("In group decisions you prioritize…",[{x:"What's most effective",k:"T"},{x:"What keeps people on board",k:"F"}]),
+  C("When someone cries in a meeting, your instinct is to…",[{x:"Fix the problem causing it",k:"T"},{x:"Tend to the person first",k:"F"}]),
+  C("Deadlines are…",[{x:"Sacred — I finish early",k:"J"},{x:"Elastic — I peak at the last minute",k:"P"}]),
+  C("Your packing style:",[{x:"List, checked twice, days ahead",k:"J"},{x:"Night before, freestyle, forget one thing",k:"P"}]),
+  C("Open browser tabs right now:",[{x:"A handful, organized",k:"J"},{x:"Dozens. They're all important.",k:"P"}]),
+  C("Which feels better?",[{x:"Deciding — options closed, plan set",k:"J"},{x:"Exploring — options open, plans loose",k:"P"}]),
+  C("Surprise change of plans tonight:",[{x:"Mildly annoying — I had a plan",k:"J"},{x:"Fun — spontaneity is the good part",k:"P"}])
+ ]
+},
+
+/* ---------- 3. IQ Challenge ---------- */
+iq:{
+ name:"IQ Challenge", icon:"🧠", color:"var(--blue)", hex:"#2F7CE0",
+ tag:"15 reasoning puzzles · scored estimate",
+ desc:"Logic, patterns, numbers, and words. Fifteen puzzles, one estimated IQ band.",
+ time:"8 min", n:15, kind:"iq",
+ questions:[
+  Q("What number comes next? 2, 6, 12, 20, 30, …",["36","40","42","44"],2),
+  Q("Which is the odd one out?",["Swan","Eagle","Penguin","Sparrow"],2),
+  Q("Book is to Reading as Fork is to…",["Kitchen","Eating","Spoon","Metal"],1),
+  Q("What number comes next? 3, 9, 27, 81, …",["162","216","243","324"],2),
+  Q("All Bloops are Razzies. All Razzies are Lazzies. Therefore all Bloops are definitely Lazzies.",["True","False","Cannot be determined"],0),
+  Q("Unscramble CIFAPIC to find a…",["Country","Ocean","Animal","City"],1),
+  Q("What is half of a quarter of 400?",["25","50","100","200"],1),
+  Q("What number comes next? 1, 1, 2, 3, 5, 8, …",["11","12","13","15"],2),
+  Q("A clock seen in a mirror shows 3:00. The real time is…",["3:00","6:00","9:00","12:00"],2),
+  Q("Which is the odd one out?",["27","64","100","125","216"],2),
+  Q("If 5 machines make 5 widgets in 5 minutes, how long do 100 machines need for 100 widgets?",["5 minutes","20 minutes","100 minutes","500 minutes"],0),
+  Q("What letter comes next? A, C, F, J, O, …",["S","T","U","V"],2),
+  Q("A brick weighs 1 kg plus half a brick. The brick weighs…",["1 kg","1.5 kg","2 kg","3 kg"],2),
+  Q("Maria is taller than Ana. Ana is taller than Zofia. Who is shortest?",["Maria","Ana","Zofia","Cannot be determined"],2),
+  Q("Which number is missing? 4 → 20, 6 → 42, 8 → 72, 9 → ?",["81","90","88","99"],1)
+ ]
+},
+
+/* ---------- 4. EQ Test ---------- */
+eq:{
+ name:"Emotional Intelligence", icon:"💗", color:"var(--pink)", hex:"#E0559A",
+ tag:"EQ · 4 domains scored",
+ desc:"Sixteen situations measure self-awareness, self-management, empathy, and relationships.",
+ time:"4 min", n:16, kind:"domains",
+ traits:{SA:"Self-Awareness",SM:"Self-Management",SO:"Social Awareness",RM:"Relationship Skills"},
+ traitDesc:{SA:"Noticing your own emotions as they happen and naming them accurately.",SM:"Staying steady under stress and choosing your reaction instead of being chosen by it.",SO:"Reading the room — picking up on moods, dynamics, and unspoken signals.",RM:"Handling conflict, feedback, and connection so relationships get stronger over time."},
+ questions:[
+  L('SA',"I can usually name exactly what I'm feeling, not just 'good' or 'bad'."),
+  L('SA',"I notice my mood shifting before it affects my behavior."),
+  L('SA',"I know which specific situations reliably trigger me."),
+  L('SA',"When I overreact, I can later trace exactly why."),
+  L('SM',"When I'm furious, I can still choose not to say the sharp thing."),
+  L('SM',"Stress rarely makes me abandon my plans or values."),
+  L('SM',"I recover from disappointments faster than most people."),
+  L('SM',"I can delay small pleasures for bigger goals without much struggle."),
+  L('SO',"I notice when someone's words and body language don't match."),
+  L('SO',"I can sense the mood of a room within seconds of entering."),
+  L('SO',"Friends say I 'just get' where they're coming from."),
+  L('SO',"I adjust how I speak depending on who I'm talking to."),
+  L('RM',"I can disagree with someone without the relationship taking damage."),
+  L('RM',"People come to me to mediate or smooth things over."),
+  L('RM',"I give difficult feedback in a way people can actually hear."),
+  L('RM',"After a conflict, I'm usually the one who rebuilds the bridge.")
+ ]
+},
+
+/* ---------- 5. Big Five ---------- */
+big5:{
+ name:"Big Five (OCEAN)", icon:"🌊", color:"var(--teal)", hex:"#0FA99B",
+ tag:"The scientific standard · 5 traits",
+ desc:"The most researched model in personality science: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.",
+ time:"5 min", n:20, kind:"domains",
+ traits:{O:"Openness",Cn:"Conscientiousness",Ex:"Extraversion",A:"Agreeableness",Ne:"Emotional Sensitivity"},
+ traitDesc:{O:"Appetite for new ideas, art, and experiences versus preference for the familiar.",Cn:"Discipline, order, and follow-through versus flexibility and spontaneity.",Ex:"Energy drawn from people and stimulation versus from quiet and depth.",A:"Warmth, trust, and cooperation versus skepticism and competitiveness.",Ne:"How strongly you feel stress and negative emotion — high scores feel deeply, low scores stay unruffled."},
+ questions:[
+  L('O',"I actively seek out art, music, or ideas that are strange to me."),
+  L('O',"Abstract, philosophical conversations energize me."),
+  L('O',"I prefer routines and familiar places to novelty.",1),
+  L('O',"I often imagine wildly different ways my life could go."),
+  L('Cn',"I finish what I start, even when it gets boring."),
+  L('Cn',"My belongings and files have a system."),
+  L('Cn',"I often leave tasks to the last minute.",1),
+  L('Cn',"People would describe me as disciplined."),
+  L('Ex',"I feel more alive in a lively crowd than alone."),
+  L('Ex',"I talk to strangers easily — in queues, on trains, anywhere."),
+  L('Ex',"I need a lot of alone time to function well.",1),
+  L('Ex',"I'm usually one of the more talkative people in a group."),
+  L('A',"I give people the benefit of the doubt by default."),
+  L('A',"I'd rather lose an argument than a friend."),
+  L('A',"I enjoy competition more than cooperation.",1),
+  L('A',"Helping someone genuinely makes my day better."),
+  L('Ne',"Small setbacks can ruin my whole day."),
+  L('Ne',"I worry about things long after others have moved on."),
+  L('Ne',"I stay calm even when everything goes wrong at once.",1),
+  L('Ne',"My mood can swing noticeably within a single day.")
+ ]
+},
+
+/* ---------- 6. Enneagram ---------- */
+ennea:{
+ name:"Enneagram", icon:"🎭", color:"var(--coral)", hex:"#FF6B5E",
+ tag:"9 core motivations · find your type",
+ desc:"Eighteen statements uncover which of the nine core motivations quietly runs your life.",
+ time:"4 min", n:18, kind:"top1",
+ traits:{T1:"Type 1 · The Reformer",T2:"Type 2 · The Helper",T3:"Type 3 · The Achiever",T4:"Type 4 · The Individualist",T5:"Type 5 · The Investigator",T6:"Type 6 · The Loyalist",T7:"Type 7 · The Enthusiast",T8:"Type 8 · The Challenger",T9:"Type 9 · The Peacemaker"},
+ traitDesc:{T1:"Driven to improve things and do what's right; allergic to sloppiness — especially your own.",T2:"Driven to be needed and loved; you give generously and sometimes forget yourself.",T3:"Driven to succeed and be seen succeeding; you adapt fast and hate stalling.",T4:"Driven to be authentic and understood; you feel deeply and refuse to be ordinary.",T5:"Driven to understand; you guard your energy and stockpile knowledge before acting.",T6:"Driven to feel secure; loyal, vigilant, and always scanning for what could go wrong.",T7:"Driven to stay free and stimulated; pain is boring, plans are appetizers, joy is the point.",T8:"Driven to be strong and in control; you protect your people and confront without flinching.",T9:"Driven to keep the peace; easygoing outside, sometimes invisible to yourself inside."},
+ questions:[
+  L('T1',"I notice errors and 'the right way' instantly, and it's hard to unsee them."),
+  L('T2',"I often know what people need before they ask — and I provide it."),
+  L('T3',"Being seen as successful matters to me more than I usually admit."),
+  L('T4',"I'd rather feel deeply and painfully than feel nothing special."),
+  L('T5',"I need to fully understand a thing before I feel safe engaging with it."),
+  L('T6',"I automatically run worst-case scenarios so I'm never caught off guard."),
+  L('T7',"When something gets painful or dull, my mind is already booking the next adventure."),
+  L('T8',"I'd rather be respected than liked."),
+  L('T9',"I often go along with others' preferences because conflict costs more than the win."),
+  L('T1',"A strong inner critic reviews almost everything I do."),
+  L('T2',"It's hard for me to ask for help, though I love giving it."),
+  L('T3',"I instinctively adjust my image to fit what each audience values."),
+  L('T4',"I often feel that something essential is missing that others seem to have."),
+  L('T5',"Unexpected demands on my time or energy feel almost physically intrusive."),
+  L('T6',"I test people's loyalty before I fully trust them."),
+  L('T7',"My plans for the future genuinely excite me more than most present moments."),
+  L('T8',"When someone is treated unjustly, I confront it immediately — volume optional."),
+  L('T9',"People say I'm calming to be around, but I sometimes numb my own wants.")
+ ]
+},
+
+/* ---------- 7. Love Languages ---------- */
+love:{
+ name:"Love Languages", icon:"💌", color:"var(--green)", hex:"#1F9E58",
+ tag:"5 languages · how you give & receive love",
+ desc:"Fifteen either/or choices reveal how you most naturally feel appreciated and cared for.",
+ time:"3 min", n:15, kind:"top1",
+ traits:{W:"Words of Affirmation",QT:"Quality Time",G:"Gifts",AS:"Acts of Service",PT:"Physical Touch"},
+ traitDesc:{W:"You feel loved when it's said out loud — praise, encouragement, 'I'm proud of you'.",QT:"You feel loved through undivided attention — phones down, eyes up, time together.",G:"You feel loved through thoughtful tokens — proof that someone saw something and thought of you.",AS:"You feel loved when someone lightens your load — done dishes speak louder than sweet words.",PT:"You feel loved through closeness — hugs, hand-holding, a shoulder squeeze that says everything."},
+ questions:[
+  C("Which lands deeper?",[{x:"'I'm so proud of you' said sincerely",k:"W"},{x:"A whole evening together, phones away",k:"QT"}]),
+  C("A rough week ends. You'd rather your partner/friend…",[{x:"Handle a chore you've been dreading",k:"AS"},{x:"Give you a long, wordless hug",k:"PT"}]),
+  C("Which feels more like love?",[{x:"A small gift that proves they were listening",k:"G"},{x:"A heartfelt note about what you mean to them",k:"W"}]),
+  C("Ideal birthday moment:",[{x:"Everyone's full attention, all day",k:"QT"},{x:"A present chosen with obvious care",k:"G"}]),
+  C("What hurts more?",[{x:"'We never really talk anymore'",k:"QT"},{x:"'They never offer to help me'",k:"AS"}]),
+  C("Which do you do for people you love?",[{x:"Reach out — a hand on the shoulder, a hug",k:"PT"},{x:"Tell them, specifically, what's great about them",k:"W"}]),
+  C("You feel most connected when someone…",[{x:"Sits close to you, arm around you",k:"PT"},{x:"Brings you something 'because it reminded me of you'",k:"G"}]),
+  C("Better surprise:",[{x:"They quietly fixed the thing you complained about",k:"AS"},{x:"They planned an entire day just for the two of you",k:"QT"}]),
+  C("A compliment or a coffee run?",[{x:"The compliment — words stay with me",k:"W"},{x:"The coffee — actions stay with me",k:"AS"}]),
+  C("Long distance is hardest because of the missing…",[{x:"Hugs and physical closeness",k:"PT"},{x:"Little packages and surprises in the mail",k:"G"}]),
+  C("You save…",[{x:"Sweet texts and cards people wrote you",k:"W"},{x:"Ticket stubs from days spent together",k:"QT"}]),
+  C("When you're sad, you most want someone to…",[{x:"Just hold you",k:"PT"},{x:"Take something off your plate",k:"AS"}]),
+  C("Which gesture would you notice first?",[{x:"They kept the doodle you gave them",k:"G"},{x:"They drove an hour just to spend one with you",k:"QT"}]),
+  C("Love is best proven by…",[{x:"What people say",k:"W"},{x:"What people do",k:"AS"}]),
+  C("Pick a perfect small moment:",[{x:"Falling asleep tangled on the couch",k:"PT"},{x:"Opening a tiny, perfect, 'saw this and thought of you' gift",k:"G"}])
+ ]
+}
+};
+
+/* MBTI type blurbs */
+const MBTI_NAMES={ISTJ:"The Inspector",ISFJ:"The Protector",INFJ:"The Advocate",INTJ:"The Architect",ISTP:"The Craftsman",ISFP:"The Artist",INFP:"The Mediator",INTP:"The Thinker",ESTP:"The Dynamo",ESFP:"The Entertainer",ENFP:"The Campaigner",ENTP:"The Debater",ESTJ:"The Executive",ESFJ:"The Consul",ENFJ:"The Protagonist",ENTJ:"The Commander"};
+</script>
+<script>
+/* ================= ENGINE ================= */
+const $=id=>document.getElementById(id);
+let cur=null, qi=0, answers=[];
+
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $('screen-'+name).classList.add('active');
+  window.scrollTo({top:0});
+}
+function scrollToId(id){setTimeout(()=>{const el=$(id);if(el)el.scrollIntoView({behavior:'smooth'})},60)}
+
+/* ----- build home grid ----- */
+(function(){
+  const g=$('testGrid');
+  Object.entries(TESTS).forEach(([id,t])=>{
+    const d=document.createElement('div');
+    d.className='tcard'; d.style.setProperty('--tc',t.color);
+    d.innerHTML=`<div class="tchip">${t.icon}</div><h3>${t.name}</h3>
+      <div class="tmeta"><span>${t.tag}</span></div>
+      <p>${t.desc}</p>
+      <div class="tmeta"><span>⏱ ${t.time}</span><span>·</span><span>${t.n} questions</span><span>·</span><span>Free</span></div>
+      <button class="btn" onclick="startTest('${id}')">Start test</button>`;
+    g.appendChild(d);
+  });
+})();
+
+/* ----- quiz flow ----- */
+function startTest(id){
+  cur=id; qi=0; answers=[];
+  const t=TESTS[id];
+  $('quizTitle').textContent=t.icon+" "+t.name;
+  document.querySelector('.progress i').style.setProperty('--qc',t.color);
+  document.documentElement.style.setProperty('--qc',t.color);
+  go('quiz'); renderQ();
+}
+function confirmExit(){ if(confirm("Leave this test? Your answers will be lost.")) go('home'); }
+
+function renderQ(){
+  const t=TESTS[cur], q=t.questions[qi];
+  $('progressBar').style.width=(qi/t.n*100)+"%";
+  $('qCount').textContent=`Question ${qi+1} of ${t.n}`;
+  $('qText').textContent=q.t;
+  const box=$('qOpts'); box.innerHTML="";
+  if(q.type==='likert'){
+    box.className='likert';
+    const labels=["Strongly disagree","Disagree","Neutral","Agree","Strongly agree"];
+    labels.forEach((lab,i)=>{
+      const b=document.createElement('button');
+      b.className='opt'; b.innerHTML=`<b>${i+1}</b>${lab}`;
+      b.onclick=()=>answer(q.rev?4-i:i);
+      box.appendChild(b);
+    });
+    $('quizFoot').textContent="Answer with your gut — first instinct is usually the honest one.";
+  }else{
+    box.className='opts';
+    q.o.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.className='opt'; b.textContent=(typeof o==='string')?o:o.x;
+      b.onclick=()=>answer(i);
+      box.appendChild(b);
+    });
+    $('quizFoot').textContent = q.type==='quiz' ? "Take your time — accuracy beats speed here." : "Pick whichever is more true, even if both fit.";
+  }
+}
+function answer(v){
+  answers.push(v);
+  qi++;
+  const t=TESTS[cur];
+  if(qi<t.n) renderQ();
+  else showAdThenResults();
+}
+
+/* ----- interstitial ad gate ----- */
+function showAdThenResults(){
+  $('progressBar').style.width="100%";
+  const ov=$('adOverlay'), btn=$('adCloseBtn');
+  ov.classList.add('show');
+  let secs=3;
+  btn.disabled=true;
+  btn.textContent=`You can close this ad in ${secs}…`;
+  const iv=setInterval(()=>{
+    secs--;
+    if(secs>0){ btn.textContent=`You can close this ad in ${secs}…`; }
+    else{
+      clearInterval(iv);
+      btn.disabled=false;
+      btn.textContent="Close ad and see my results ✕";
+    }
+  },1000);
+  btn.onclick=()=>{ if(!btn.disabled){ ov.classList.remove('show'); showResults(); } };
+}
+
+/* ----- scoring & results ----- */
+function scoreTraits(t){
+  const s={}; Object.keys(t.traits).forEach(k=>s[k]={sum:0,max:0});
+  t.questions.forEach((q,i)=>{
+    if(q.type==='likert'){ s[q.k].sum+=answers[i]; s[q.k].max+=4; }
+    else if(q.type==='choice'){ const k=q.o[answers[i]].k; if(s[k]){s[k].sum+=1; s[k].max+=0;} }
+  });
+  if(t.questions[0].type==='choice'){ // frequency-based (love languages)
+    const total=answers.length;
+    return Object.entries(s).map(([k,v])=>({k,pct:Math.round(v.sum/total*100),raw:v.sum}))
+      .sort((a,b)=>b.raw-a.raw);
+  }
+  return Object.entries(s).map(([k,v])=>({k,pct:Math.round(v.sum/v.max*100)}))
+    .sort((a,b)=>b.pct-a.pct);
+}
+
+function barRow(label,pct,color,note){
+  return `<div class="bar-row"><div class="bar-top"><span>${label}</span><span>${pct}%${note?" · "+note:""}</span></div>
+    <div class="bar"><i style="--bc:${color};width:0" data-w="${pct}"></i></div></div>`;
+}
+
+function showResults(){
+  const t=TESTS[cur]; let html="";
+  const c=t.hex;
+
+  if(t.kind==='mbti'){
+    const tally={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+    t.questions.forEach((q,i)=>tally[q.o[answers[i]].k]++);
+    const type=(tally.E>=tally.I?"E":"I")+(tally.S>=tally.N?"S":"N")+(tally.T>=tally.F?"T":"F")+(tally.J>=tally.P?"J":"P");
+    const pairs=[["E","I","Extraverted","Introverted"],["S","N","Sensing","Intuitive"],["T","F","Thinking","Feeling"],["J","P","Judging","Perceiving"]];
+    html=`<div class="eyebrow">Your 16-Types result</div>
+      <div class="result-title">${type} — ${MBTI_NAMES[type]}</div>
+      <p class="result-sub">Your four letters below show how strongly you leaned each way. Percentages near 50% mean you're flexible on that axis — that's a feature, not a bug.</p>
+      <div class="bars">` +
+      pairs.map(([a,b,an,bn])=>{
+        const total=tally[a]+tally[b], lead=tally[a]>=tally[b]?a:b, pct=Math.round(Math.max(tally[a],tally[b])/total*100);
+        return barRow(`${lead} · ${lead===a?an:bn}`,pct,c);
+      }).join("")+`</div>`;
+  }
+
+  else if(t.kind==='iq'){
+    const correct=t.questions.reduce((n,q,i)=>n+(answers[i]===q.correct?1:0),0);
+    const iq=Math.round(70+correct*4.7); // 0→70 … 15→~140
+    const band= iq>=130?"Exceptional range":iq>=115?"Above-average range":iq>=95?"Solid average range":iq>=85?"Slightly below average today":"Warm-up round — try again fresh";
+    html=`<div class="eyebrow">Your IQ Challenge result</div>
+      <div class="result-title">≈ ${iq} <span style="font-size:.5em;color:var(--muted)">estimated</span></div>
+      <p class="result-sub">You solved <b>${correct} of 15</b> puzzles. ${band}. Remember: this is a quick reasoning snapshot, not a proctored psychometric exam — sleep, coffee, and mood all move this number.</p>
+      <div class="bars">${barRow("Puzzles solved",Math.round(correct/15*100),c,correct+"/15")}</div>`;
+  }
+
+  else if(t.kind==='top'){ // strengths: top 5 of 10
+    const sc=scoreTraits(t), top=sc.slice(0,5);
+    html=`<div class="eyebrow">Your Strengths Spotlight</div>
+      <div class="result-title">Your top 5 strengths</div>
+      <p class="result-sub">These are the muscles you flex without noticing. Build your work and life around them.</p>
+      <div class="bars">`+top.map((r,i)=>barRow(`${i+1}. ${t.traits[r.k]}`,r.pct,c)).join("")+`</div>`+
+      top.slice(0,2).map(r=>`<p class="result-sub" style="margin-top:6px"><b>${t.traits[r.k]}:</b> ${t.traitDesc[r.k]}</p>`).join("");
+  }
+
+  else if(t.kind==='top1'){ // enneagram / love languages
+    const sc=scoreTraits(t), w=sc[0], second=sc[1];
+    html=`<div class="eyebrow">Your ${t.name} result</div>
+      <div class="result-title">${t.traits[w.k]}</div>
+      <p class="result-sub">${t.traitDesc[w.k]}</p>
+      <div class="bars">`+sc.map(r=>barRow(t.traits[r.k],r.pct,c)).join("")+`</div>
+      <p class="result-sub"><b>Close second:</b> ${t.traits[second.k]} — ${t.traitDesc[second.k]}</p>`;
+  }
+
+  else{ // domains: EQ, Big Five
+    const sc=scoreTraits(t);
+    const order=Object.keys(t.traits); // keep canonical order
+    html=`<div class="eyebrow">Your ${t.name} profile</div>
+      <div class="result-title">${t.name} breakdown</div>
+      <p class="result-sub">There's no perfect profile — each trait has a bright side at both ends. Your strongest area is <b>${t.traits[sc[0].k]}</b>.</p>
+      <div class="bars">`+order.map(k=>{const r=sc.find(x=>x.k===k);return barRow(t.traits[k],r.pct,c)}).join("")+`</div>`+
+      `<p class="result-sub"><b>${t.traits[sc[0].k]}:</b> ${t.traitDesc[sc[0].k]}</p>`;
+  }
+
+  html+=`<div class="result-note">For self-reflection and entertainment only — not a clinical, diagnostic, or hiring tool.</div>`;
+  $('resultCard').innerHTML=html;
+  $('retakeBtn').onclick=()=>startTest(cur);
+  go('results');
+  requestAnimationFrame(()=>setTimeout(()=>{
+    document.querySelectorAll('.bar i').forEach(b=>b.style.width=b.dataset.w+"%");
+  },80));
+}
+</script>
+</body>
+</html>
