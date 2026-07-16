@@ -271,6 +271,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:34px 0;color:var
             <button class="share-btn sb-x" id="shareX" title="Share on X">𝕏</button>
             <button class="share-btn sb-wa" id="shareWA" title="Share on WhatsApp">💬</button>
             <button class="share-btn sb-copy" id="shareCopy" title="Copy link">🔗</button>
+            <button class="share-btn sb-native" id="shareNative" title="More share options" style="display:none">📲</button>
           </div>
         </div>
         <div class="retake-row">
@@ -652,6 +653,15 @@ function setupShare(t){
       setTimeout(()=>{b.classList.remove('copied'); b.innerHTML="🔗";},1800);
     });
   };
+  const nativeBtn=$('shareNative');
+  if(navigator.share){
+    nativeBtn.style.display='flex';
+    nativeBtn.onclick=()=>{
+      navigator.share({title:'MindMosaic', text:text, url:url}).catch(()=>{});
+    };
+  }else{
+    nativeBtn.style.display='none';
+  }
 }
 
 function barRow(label,pct,color,note){
